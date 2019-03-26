@@ -22,7 +22,6 @@ training {
 	 loss {
 	      size_average: False
 	 }
-	 resume_path: "runs/42465/best_model.pkl"
 }
 
 seed: 1337
