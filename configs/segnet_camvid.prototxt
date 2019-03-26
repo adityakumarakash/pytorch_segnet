@@ -1,0 +1,34 @@
+model {
+      arch: "segnet"
+}
+
+data {
+     dataset: "camvid"
+     path: "/home/aditya/Experiments/Datasets/cv/CamVid"
+     train_split: "train"
+     val_split: "val"
+}
+
+training {
+	 num_workers: 12
+	 epoch: 20
+	 batch_size: 1
+	 val_epoch: 1
+	 disp_iter: 100
+	 optimizer {
+		   lr: 0.0000001
+		   args: "momentum: 0.8"
+	 }
+	 loss {
+	      size_average: False
+	 }
+	 resume_path: "runs/42465/best_model.pkl"
+}
+
+seed: 1337
+
+test {
+     model_path: "runs/42465/best_model.pkl"
+     image_path: "../Datasets/cv/CamVid/test/Seq05VD_f02460.png"
+     output_path: "../TestOutput/test_segout.png"
+}
