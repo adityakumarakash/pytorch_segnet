@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+// This proto encodes the different configuration arguments.
+message Config {
+	// Type of model being trained.
+	message Model {
+		optional string arch = 1;
+	}
+
+	// Arguments about the dataset being trained.
+	message Data {
+		required string dataset = 1;  // Name of the dataset
+		required string path = 2;  // Path to the dataset
+		optional string train_split = 3;  // Name of training split
+		optional string val_split = 4;  // Name of the validation split
+		optional string test_split = 5;  // Name of test split if model being tested
+	}
+
+	// Training related arguments.
+	message Training {
+		// Arguments for the optimizer.
+		message Optimizer {
+			optional double lr = 2;  // Learning rate
+			optional string args = 3;  // Additional args for the optimizer
+		}
+
+		// Loss function arguments.
+		message Loss {
+			optional bool size_average = 1;
+		}
+		
+		optional int32 num_workers = 1;
+		optional int32 epoch = 2;  // Num epochs to run the model.
+		optional int32 batch_size = 3;  // Batch size for the training
+		optional int32 val_epoch = 4;  // Epoch intervals for validation
+		optional int32 disp_iter = 5;  // Iteration interval to display loss
+		optional Optimizer optimizer = 6;
+		optional Loss loss = 7;
+		optional string resume_path = 8;  // Path to checkpoint from where training resumes.
+	}
+
+	// Arguments related to the testing of the model.
+	message Test {
+		optional string model_path = 1;  // Path to the model being tested
+		optional string image_path = 2;   // Path to input image being segmented
+		optional string output_path = 3;  // Path to the output segmentation
+		// This bit tells if the model is to be run on the test split.
+		optional bool evaluate_on_test_split = 4 [default = false];  
+	}
+
+	optional Model model = 1;
+	optional Data data = 2;
+	optional Training training = 3;
+	optional int32 seed = 4 [default = 311];  // Random seed to initialize the models.
+	optional Test test = 5;
+}
